@@ -103,13 +103,18 @@ class CadastroActivity : AppCompatActivity() {
             }
     }
 
+    // CadastroActivity.kt
     private fun salvarDadosAluno(userId: String, nomeCompleto: String, email: String) {
+        // Determinar se é admin (você pode usar um critério como email específico)
+        val isAdmin = email == "admin@fitunifor.com"
+
         val aluno = hashMapOf(
             "nome" to nomeCompleto,
-            "email" to email
+            "email" to email,
+            "tipo" to if (isAdmin) "admin" else "aluno"
         )
 
-        firestore.collection("alunos")
+        firestore.collection("usuarios")
             .document(userId)
             .set(aluno)
             .addOnSuccessListener {
@@ -118,7 +123,6 @@ class CadastroActivity : AppCompatActivity() {
                     "Cadastro realizado com sucesso!",
                     Toast.LENGTH_SHORT
                 ).show()
-                // Redireciona para a tela principal ou de login
                 finish()
             }
             .addOnFailureListener { e ->
